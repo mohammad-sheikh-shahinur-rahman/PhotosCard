@@ -2,981 +2,935 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>ফটো কার্ড জেনারেটর</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>নিউজ ফটো কার্ড প্রো</title>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;600;700&family=Noto+Serif+Bengali:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --bg:        #080f09;
-  --panel:     #0b1a0d;
-  --panel2:    #0e2011;
-  --border:    #1a3d1d;
-  --border2:   #254d29;
-  --input-bg:  #060e07;
-  --gold:      #e8b923;
-  --gold2:     #f5d06b;
-  --text:      #d4ebd5;
-  --muted:     #4a7a50;
-  --green:     #2e7d32;
-  --green2:    #43a047;
-  --red:       #8B0000;
-  --accent:    #1b5e20;
-  --panel-w:   360px;
-  --header-h:  58px;
-  --footer-h:  110px;
-  --radius:    12px;
-  --shadow:    0 8px 32px rgba(0,0,0,0.7);
+  --bg: #0a0a0f;
+  --panel: #111118;
+  --panel2: #16161f;
+  --border: #2a2a3d;
+  --border2: #3a3a55;
+  --input-bg: #0d0d16;
+  --gold: #f0c040;
+  --gold2: #f8dc80;
+  --text: #e8e8f0;
+  --muted: #5a5a7a;
+  --accent: #6c63ff;
+  --red: #e53935;
+  --panel-w: 370px;
+  --header-h: 60px;
 }
-
 html, body { height: 100%; overflow: hidden; }
+body { display: flex; flex-direction: column; background: var(--bg); font-family: 'Hind Siliguri', sans-serif; color: var(--text); }
 
-body {
-  display: flex;
-  flex-direction: column;
-  background: var(--bg);
-  font-family: 'Hind Siliguri', sans-serif;
-  color: var(--text);
-  position: relative;
-}
-
+/* TOPBAR */
 #topbar {
-  height: var(--header-h);
-  background: var(--panel);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  padding: 0 18px;
-  gap: 14px;
-  flex-shrink: 0;
-  z-index: 100;
-  position: relative;
+  height: var(--header-h); background: var(--panel); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 14px; gap: 10px; flex-shrink: 0; z-index: 100;
 }
-
-#topbar .logo {
-  display: flex; align-items: center; gap: 10px;
-}
+#topbar .logo { display: flex; align-items: center; gap: 8px; min-width: 0; }
 #topbar .logo .icon {
-  width: 34px; height: 34px;
-  background: linear-gradient(135deg, var(--red), #c62828);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 17px;
-  box-shadow: 0 2px 8px rgba(139,0,0,0.5);
-  flex-shrink: 0;
+  width: 34px; height: 34px; min-width: 34px; background: linear-gradient(135deg, #e53935, #b71c1c);
+  border-radius: 9px; display: flex; align-items: center; justify-content: center;
+  font-size: 16px; box-shadow: 0 2px 10px rgba(229,57,53,0.4);
 }
-#topbar .logo h1 {
-  font-size: 16px; font-weight: 700;
-  color: var(--gold);
-  white-space: nowrap;
-}
-#topbar .logo p {
-  font-size: 10.5px; color: var(--muted);
-  white-space: nowrap;
-}
-
+#topbar .logo h1 { font-size: 14px; font-weight: 700; color: var(--gold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#topbar .logo p { font-size: 9px; color: var(--muted); white-space: nowrap; }
 #topbar .spacer { flex: 1; }
-
-#toggle-panel {
-  display: none;
-  width: 38px; height: 38px;
-  border: 1px solid var(--border2);
-  border-radius: 9px;
-  background: var(--panel2);
-  color: var(--text);
-  cursor: pointer;
-  align-items: center; justify-content: center;
-  font-size: 18px;
-  flex-shrink: 0;
-  transition: background 0.2s;
+.tb-btn {
+  padding: 7px 12px; border: none; border-radius: 8px; cursor: pointer;
+  font-family: 'Hind Siliguri', sans-serif; font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; gap: 5px; transition: opacity .2s, transform .1s; white-space: nowrap; flex-shrink: 0;
 }
-#toggle-panel:hover { background: var(--border); }
-
-.topbar-btn {
-  padding: 8px 15px;
-  border: none; border-radius: 8px;
-  font-family: 'Hind Siliguri', sans-serif;
-  font-size: 13px; font-weight: 700;
-  cursor: pointer;
-  display: flex; align-items: center; gap: 6px;
-  transition: opacity 0.18s, transform 0.12s;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.topbar-btn:active { transform: scale(0.95); }
-.topbar-btn:hover  { opacity: 0.85; }
+.tb-btn:active { transform: scale(.95); }
+.tb-btn:hover { opacity: .85; }
 .btn-render { background: linear-gradient(135deg, #b8870e, var(--gold)); color: #0a0800; }
-.btn-dl     { background: linear-gradient(135deg, #145214, #1b7e1b); color: #c8f5c8; }
-
-#main {
-  flex: 1;
-  display: flex;
-  overflow: hidden;
-  position: relative;
+.btn-dl { background: linear-gradient(135deg, #1b5e20, #2e7d32); color: #c8f5c8; }
+#toggle-panel {
+  display: none; width: 36px; height: 36px; min-width: 36px; border: 1px solid var(--border2);
+  border-radius: 9px; background: var(--panel2); color: var(--text); cursor: pointer;
+  align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
 }
 
+/* MAIN */
+#main { flex: 1; display: flex; overflow: hidden; }
 #panel {
-  width: var(--panel-w);
-  min-width: var(--panel-w);
-  height: 100%;
-  background: var(--panel);
-  border-right: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  z-index: 50;
-  transition: transform 0.3s cubic-bezier(.4,0,.2,1);
-  flex-shrink: 0;
+  width: var(--panel-w); min-width: var(--panel-w); height: 100%; background: var(--panel);
+  border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden;
+  flex-shrink: 0; transition: transform .3s cubic-bezier(.4,0,.2,1);
 }
-
 #panel-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border2) transparent;
+  flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 9px;
+  scrollbar-width: thin; scrollbar-color: var(--border2) transparent;
+  -webkit-overflow-scrolling: touch;
 }
+#panel-body::-webkit-scrollbar { width: 4px; }
+#panel-body::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
 
 .sec-label {
-  font-size: 9.5px; font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 1.4px;
-  text-transform: uppercase;
-  padding-bottom: 2px;
-  border-bottom: 1px solid var(--border);
-  margin-top: 4px;
+  font-size: 9px; font-weight: 700; color: var(--muted); letter-spacing: 1.5px;
+  text-transform: uppercase; padding-bottom: 4px; border-bottom: 1px solid var(--border); margin-top: 2px;
 }
-
 .field { display: flex; flex-direction: column; gap: 4px; }
-.field label {
-  font-size: 11.5px; font-weight: 600;
-  color: #6cbf6c;
+.field label { font-size: 11px; font-weight: 600; color: #7c9cf5; }
+.field input[type=text], .field input[type=url], .field textarea, .field select {
+  background: var(--input-bg); border: 1.5px solid var(--border); border-radius: 8px;
+  padding: 8px 10px; color: var(--text); font-size: 13px; font-family: 'Hind Siliguri', sans-serif;
+  outline: none; transition: border-color .18s; width: 100%;
 }
-.field input[type=text],
-.field input[type=url],
-.field input[type=range],
-.field textarea {
-  background: var(--input-bg);
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  padding: 8px 11px;
-  color: var(--text);
-  font-size: 13px;
-  font-family: 'Hind Siliguri', sans-serif;
-  outline: none;
-  transition: border-color 0.18s, box-shadow 0.18s;
-  width: 100%;
-}
-.field input:focus,
-.field textarea:focus {
-  border-color: #4caf50;
-  box-shadow: 0 0 0 2.5px rgba(76,175,80,0.15);
-}
-.field textarea { resize: vertical; min-height: 78px; line-height: 1.6; }
-.field input[type=range] { padding: 4px 0; cursor: pointer; accent-color: var(--gold); }
+.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(108,99,255,.15); }
+.field textarea { resize: vertical; min-height: 70px; line-height: 1.6; }
+.field input[type=range] { accent-color: var(--gold); width: 100%; cursor: pointer; height: 4px; }
+.field select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%235a5a7a'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
 
 .upload-box {
-  border: 2px dashed var(--border2);
-  border-radius: 11px;
-  padding: 15px 10px;
-  text-align: center;
-  cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
-  position: relative;
-  background: var(--input-bg);
+  border: 2px dashed var(--border2); border-radius: 10px; padding: 12px 10px;
+  text-align: center; cursor: pointer; transition: border-color .2s, background .2s;
+  position: relative; background: var(--input-bg);
 }
-.upload-box:hover { border-color: #4caf50; background: #0c1e0e; }
+.upload-box:hover { border-color: var(--accent); background: #0f0f1e; }
 .upload-box input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-.upload-box .icon { font-size: 26px; }
-.upload-box .txt  { font-size: 12px; color: var(--muted); margin-top: 5px; }
-.upload-box .fname { font-size: 10.5px; color: var(--gold); margin-top: 3px; word-break: break-all; min-height: 15px; }
+.upload-box .icon { font-size: 22px; }
+.upload-box .txt { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.upload-box .fname { font-size: 10px; color: var(--gold); margin-top: 3px; word-break: break-all; }
 
-#thumb-wrap { display:none; position:relative; width:100%; border-radius:8px; overflow:hidden; background:#000; }
-#thumb-wrap img { width:100%; max-height:130px; object-fit:cover; display:block; }
+#thumb-wrap { display:none; position:relative; border-radius:8px; overflow:hidden; background:#000; }
+#thumb-wrap img { width:100%; max-height:110px; object-fit:cover; display:block; }
 #thumb-clear {
-  position:absolute; top:6px; right:6px;
-  width:26px; height:26px;
-  background:rgba(0,0,0,0.7); border-radius:50%;
-  border:none; color:#fff; cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  font-size:14px;
+  position:absolute; top:5px; right:5px; width:24px; height:24px;
+  background:rgba(0,0,0,.75); border-radius:50%; border:none; color:#fff;
+  cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:13px;
 }
 
-.color-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+.ad-box {
+  border: 2px dashed var(--border2); border-radius: 10px; padding: 11px 10px;
+  text-align: center; cursor: pointer; transition: border-color .2s, background .2s;
+  position: relative; background: var(--input-bg);
 }
-.color-item { display: flex; flex-direction: column; gap: 4px; }
-.color-item label { font-size: 10.5px; font-weight: 600; color: #6cbf6c; }
+.ad-box:hover { border-color: #f0c040; background: #1a1200; }
+.ad-box input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.ad-box .icon { font-size: 20px; }
+.ad-box .txt { font-size: 10.5px; color: var(--muted); margin-top: 3px; }
+.ad-box .fname { font-size: 9.5px; color: var(--gold); margin-top: 2px; word-break: break-all; }
+#ad-thumb-wrap { display:none; position:relative; border-radius:8px; overflow:hidden; background:#000; }
+#ad-thumb-wrap img { width:100%; max-height:80px; object-fit:cover; display:block; }
+#ad-thumb-clear {
+  position:absolute; top:4px; right:4px; width:22px; height:22px;
+  background:rgba(0,0,0,.75); border-radius:50%; border:none; color:#fff;
+  cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:12px;
+}
+
+.color-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.color-item { display: flex; flex-direction: column; gap: 3px; }
+.color-item label { font-size: 10px; font-weight: 600; color: #7c9cf5; }
 .color-swatch {
-  display: flex; align-items: center; gap: 6px;
-  background: var(--input-bg);
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  padding: 5px 8px;
-  cursor: pointer;
-  transition: border-color 0.18s;
+  display: flex; align-items: center; gap: 6px; background: var(--input-bg);
+  border: 1.5px solid var(--border); border-radius: 7px; padding: 5px 8px; cursor: pointer;
 }
-.color-swatch:hover { border-color: var(--border2); }
-.color-swatch input[type=color] {
-  width: 28px; height: 24px;
-  border: none; border-radius: 5px;
-  cursor: pointer; padding: 1px; background: none; flex-shrink: 0;
-}
-.color-swatch span { font-size: 9.5px; color: var(--muted); font-family: monospace; }
-
-.divider { border: none; border-top: 1px solid var(--border); }
+.color-swatch input[type=color] { width: 26px; height: 22px; border: none; border-radius: 4px; cursor: pointer; padding: 1px; background: none; }
+.color-swatch span { font-size: 9px; color: var(--muted); font-family: monospace; }
 
 .row2 { display:flex; gap:8px; }
 .row2 .field { flex:1; }
+.divider { border: none; border-top: 1px solid var(--border); margin: 2px 0; }
 
+/* preset grid */
+.preset-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:5px; }
+.preset-btn {
+  display:flex; flex-direction:column; align-items:center; padding:7px 4px;
+  background:var(--input-bg); border:1.5px solid var(--border); border-radius:8px;
+  cursor:pointer; color:var(--text); font-family:'Hind Siliguri',sans-serif; position:relative; transition:border-color .18s, background .18s;
+}
+.preset-btn:hover { border-color:var(--border2); background:#0f0f1e; }
+.preset-btn.active { border-color:var(--gold); background:#13100a; box-shadow:0 0 0 1px rgba(240,192,64,.25); }
+.preset-btn.active::after { content:'✓'; position:absolute; top:3px; right:5px; font-size:8px; color:var(--gold); font-weight:900; }
+.preset-btn .p-icon { font-size:15px; }
+.preset-btn .p-name { font-size:9.5px; font-weight:700; margin-top:2px; }
+.preset-btn .p-size { font-size:7.5px; color:var(--muted); font-family:monospace; margin-top:1px; }
+.preset-btn .p-ratio { font-size:7px; color:var(--gold); }
+
+/* tabs */
+.tab-bar { display:flex; gap:4px; background:var(--input-bg); padding:4px; border-radius:10px; }
+.tab-btn {
+  flex:1; padding:7px 4px; border:none; border-radius:7px; cursor:pointer;
+  font-family:'Hind Siliguri',sans-serif; font-size:11px; font-weight:700;
+  background:transparent; color:var(--muted); transition:background .2s, color .2s;
+}
+.tab-btn.active { background:var(--accent); color:#fff; }
+.tab-content { display:none; flex-direction:column; gap:9px; }
+.tab-content.active { display:flex; }
+
+/* CANVAS */
 #canvas-area {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 22px 20px 32px;
-  gap: 14px;
-  background:
-    radial-gradient(ellipse at 10% 10%, #0d2710 0%, transparent 50%),
-    radial-gradient(ellipse at 90% 90%, #09180a 0%, transparent 50%),
-    var(--bg);
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  overflow-y: auto; overflow-x: hidden; padding: 16px 16px 28px;
+  gap: 12px; background: radial-gradient(ellipse at 20% 20%, #0d0d1e 0%, transparent 60%), var(--bg);
+  -webkit-overflow-scrolling: touch;
 }
-
-.canvas-label {
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  font-weight: 700;
-  flex-shrink: 0;
-  display: flex; align-items: center; gap: 8px;
-}
-
-.live-dot {
-  width: 7px; height: 7px;
-  background: #4caf50;
-  border-radius: 50%;
-  animation: pulse 1.8s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%, 100% { opacity:1; transform:scale(1); }
-  50%       { opacity:0.4; transform:scale(0.7); }
-}
-
-#canvas-wrapper {
-  width: 100%;
-  max-width: 820px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-}
-
-#main-canvas {
-  border-radius: 10px;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.06),
-    0 4px 20px rgba(0,0,0,0.6),
-    0 24px 64px rgba(0,0,0,0.8);
-  width: 100%;
-  height: auto;
-  display: block;
-  transition: box-shadow 0.3s;
-}
-#main-canvas:hover {
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.1),
-    0 4px 24px rgba(0,0,0,0.7),
-    0 28px 72px rgba(0,0,0,0.85);
-}
-
-.canvas-info {
-  display: flex; gap: 12px; align-items: center;
-  font-size: 10.5px; color: var(--muted);
-  flex-wrap: wrap; justify-content: center;
-}
-.canvas-info span { display:flex; align-items:center; gap:4px; }
-
-.dl-row {
-  display: flex; gap: 10px; width:100%; max-width:820px;
-  flex-wrap: wrap;
-}
+.canvas-label { font-size: 10px; color: var(--muted); letter-spacing: 1.2px; text-transform: uppercase; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.live-dot { width: 7px; height: 7px; background: #6c63ff; border-radius: 50%; animation: pulse 1.8s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)} }
+#canvas-wrapper { width: 100%; max-width: 800px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+#main-canvas { border-radius: 10px; width: 100%; height: auto; display: block; box-shadow: 0 4px 24px rgba(0,0,0,.7), 0 24px 64px rgba(0,0,0,.8); }
+.canvas-info { display: flex; gap: 10px; font-size: 10px; color: var(--muted); flex-wrap: wrap; justify-content: center; }
+.dl-row { display: flex; gap: 10px; width:100%; max-width:800px; }
 .dl-btn {
-  flex: 1; min-width: 130px;
-  padding: 11px 16px;
-  border: none; border-radius: 10px;
-  font-family: 'Hind Siliguri', sans-serif;
-  font-size: 13px; font-weight: 700;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  transition: opacity 0.18s, transform 0.1s, box-shadow 0.2s;
+  flex: 1; padding: 11px 14px; border: none; border-radius: 10px;
+  font-family: 'Hind Siliguri', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: opacity .18s, transform .1s;
 }
-.dl-btn:active { transform: scale(0.96); }
-.dl-btn:hover  { opacity: 0.88; box-shadow: 0 4px 16px rgba(0,0,0,0.5); }
+.dl-btn:active { transform: scale(.96); }
+.dl-btn:hover { opacity: .88; }
 .dl-png { background: linear-gradient(135deg, #145214, #2e7d32); color: #c8f5c8; }
 .dl-jpg { background: linear-gradient(135deg, #1a3a6e, #1976d2); color: #c8e0ff; }
 
-#overlay {
-  display: none;
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.6);
-  z-index: 40;
-  backdrop-filter: blur(3px);
-}
-
+#overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:40; backdrop-filter:blur(3px); }
 #toast {
-  position: fixed; bottom: 24px; left: 50%;
-  transform: translateX(-50%) translateY(80px);
-  background: var(--green);
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 40px;
-  font-size: 13px; font-weight: 600;
-  pointer-events: none;
-  z-index: 200;
-  transition: transform 0.35s cubic-bezier(.34,1.56,.64,1), opacity 0.35s;
-  opacity: 0;
-  white-space: nowrap;
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px);
+  background:#2e7d32; color:#fff; padding:10px 20px; border-radius:40px;
+  font-size:13px; font-weight:700; transition:transform .4s cubic-bezier(.18,.89,.32,1.28); z-index:200;
+  box-shadow:0 4px 15px rgba(0,0,0,.3);
 }
-#toast.show {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-}
+#toast.show { transform:translateX(-50%) translateY(0); }
 
-@media (max-width: 1024px) {
-  :root { --panel-w: 310px; }
-}
-
-@media (max-width: 768px) {
-  :root { --panel-w: 100%; }
-  #topbar .logo p { display: none; }
+/* RESPONSIVE */
+@media (max-width: 850px) {
   #toggle-panel { display: flex; }
-  #topbar .topbar-btn span.label { display: none; }
   #panel {
-    position: fixed;
-    top: var(--header-h);
-    left: 0;
-    bottom: 0;
-    width: min(360px, 100vw);
-    transform: translateX(-110%);
-    border-right: 1px solid var(--border2);
-    box-shadow: 4px 0 32px rgba(0,0,0,0.7);
+    position: fixed; left: 0; top: var(--header-h); bottom: 0;
+    z-index: 50; transform: translateX(-100%);
+    box-shadow: 20px 0 50px rgba(0,0,0,.5);
   }
   #panel.open { transform: translateX(0); }
-  #overlay { display: block; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-  #overlay.show { opacity: 1; pointer-events: auto; }
-  #canvas-area { padding: 16px 12px 28px; }
-  .dl-row { gap: 8px; }
-  .dl-btn { min-width: 110px; font-size: 12px; }
+  #overlay.show { display: block; }
+  #canvas-area { padding: 12px; }
+  .dl-row { flex-direction: column; }
 }
-
-@media (max-width: 480px) {
-  #topbar { padding: 0 12px; gap: 10px; }
-  #topbar .logo h1 { font-size: 14px; }
-  .topbar-btn { padding: 7px 11px; font-size: 12px; }
-  #canvas-area { padding: 12px 10px 24px; }
-}
-
-.preset-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 7px;
-}
-.preset-btn {
-  display: flex; flex-direction: column; align-items: center;
-  padding: 8px 5px;
-  background: var(--input-bg);
-  border: 1.5px solid var(--border);
-  border-radius: 9px;
-  cursor: pointer;
-  transition: border-color 0.18s, background 0.18s, transform 0.1s;
-  color: var(--text);
-  font-family: 'Hind Siliguri', sans-serif;
-  position: relative;
-  overflow: hidden;
-}
-.preset-btn:hover { border-color: var(--border2); background: #0c1e0e; }
-.preset-btn:active { transform: scale(0.95); }
-.preset-btn.active {
-  border-color: var(--gold);
-  background: #1a1400;
-  box-shadow: 0 0 0 1px rgba(232,185,35,0.3), 0 2px 10px rgba(232,185,35,0.15);
-}
-.preset-btn .p-icon { font-size: 18px; line-height: 1; }
-.preset-btn .p-name {
-  font-size: 10px; font-weight: 700;
-  color: var(--text);
-  margin-top: 4px;
-  text-align: center;
-}
-.preset-btn .p-size {
-  font-size: 8.5px; color: var(--muted);
-  margin-top: 2px; font-family: monospace;
-}
-.preset-btn .p-ratio {
-  font-size: 8px; color: var(--gold);
-  margin-top: 1px;
-}
-.preset-btn.active::after {
-  content: '✓';
-  position: absolute;
-  top: 4px; right: 6px;
-  font-size: 9px;
-  color: var(--gold);
-  font-weight: 900;
-}
-.preset-btn .p-thumb {
-  width: 28px; height: 16px;
-  border: 1.5px solid currentColor;
-  border-radius: 2px;
-  opacity: 0.4;
-  margin-bottom: 3px;
-  flex-shrink: 0;
-}
-.preset-btn.active .p-thumb { opacity: 0.8; border-color: var(--gold); }
-
-#panel-body::-webkit-scrollbar { width: 4px; }
-#panel-body::-webkit-scrollbar-track { background: transparent; }
-#panel-body::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
-#canvas-area::-webkit-scrollbar { width: 5px; }
-#canvas-area::-webkit-scrollbar-track { background: transparent; }
-#canvas-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
 </style>
 </head>
 <body>
-
-<div id="toast">✅ ডাউনলোড হচ্ছে...</div>
-<div id="overlay" onclick="closePanel()"></div>
 
 <div id="topbar">
   <button id="toggle-panel" onclick="togglePanel()">☰</button>
   <div class="logo">
     <div class="icon">📰</div>
     <div>
-      <h1>ফটো কার্ড জেনারেটর</h1>
-      <p>ডায়নামিক নিউজ ফটো কার্ড — লাইভ প্রিভিউ</p>
+      <h1>নিউজ ফটো কার্ড প্রো</h1>
+      <p>প্রফেশনাল নিউজ কার্ড মেকার</p>
     </div>
   </div>
   <div class="spacer"></div>
-  <button class="topbar-btn btn-render" onclick="render()">✨ <span class="label">আপডেট</span></button>
-  <button class="topbar-btn btn-dl" onclick="doDownload('png')">⬇️ <span class="label">PNG</span></button>
+  <button class="tb-btn btn-render" onclick="render()">রেন্ডার</button>
+  <button class="tb-btn btn-dl" onclick="doDownload('png')">ডাউনলোড</button>
 </div>
 
 <div id="main">
-
   <div id="panel">
     <div id="panel-body">
-
-      <span class="sec-label">📷 ছবি আপলোড</span>
-      <div class="upload-box" id="upload-box">
-        <input type="file" id="img-file" accept="image/*">
-        <div class="icon">🖼️</div>
-        <div class="txt">ক্লিক করে ছবি বেছে নিন</div>
-        <div class="fname" id="fname">কোনো ছবি নেই</div>
-      </div>
-      <div id="thumb-wrap">
-        <img id="thumb" src="" alt="">
-        <button id="thumb-clear" onclick="clearImage()" title="ছবি মুছুন">✕</button>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('content')">কন্টেন্ট</button>
+        <button class="tab-btn" onclick="switchTab('design')">ডিজাইন</button>
+        <button class="tab-btn" onclick="switchTab('ad')">বিজ্ঞাপন</button>
       </div>
 
-      <div class="divider"></div>
-      <span class="sec-label">✏️ কন্টেন্ট</span>
-
-      <div class="field" style="display:none">
-        <label>ব্যানার শিরোনাম</label>
-        <input type="text" id="f-banner" value="" placeholder="">
-      </div>
-      <div class="field" style="display:none">
-        <label>ব্যানার সাব টেক্সট</label>
-        <input type="text" id="f-bsub" placeholder="">
-      </div>
-      <div class="field" style="display:none">
-        <label>তারিখ</label>
-        <input type="text" id="f-date" value="">
-      </div>
-      <div class="field">
-        <label>মূল শিরোনাম</label>
-        <textarea id="f-title">ত্রিশালে নজরুল এর ১২৭তম জন্মজয়ন্তী উপলক্ষে প্রস্তুতিমূলক সভা অনুষ্ঠিত</textarea>
-      </div>
-      <div class="field">
-        <label>Facebook URL</label>
-        <input type="url" id="f-fb" value="https://www.facebook.com/parves5242">
-      </div>
-
-      <div class="divider"></div>
-      <span class="sec-label">📐 Facebook পোস্ট সাইজ প্রিসেট</span>
-
-      <div class="preset-grid">
-        <button class="preset-btn" id="preset-standard" onclick="applyPreset('standard')">
-          <div class="p-thumb" style="width:28px;height:15px"></div>
-          <div class="p-name">স্ট্যান্ডার্ড</div>
-          <div class="p-size">1200×630</div>
-          <div class="p-ratio">1.91:1</div>
-        </button>
-        <button class="preset-btn" id="preset-square" onclick="applyPreset('square')">
-          <div class="p-thumb" style="width:20px;height:20px"></div>
-          <div class="p-name">স্কয়ার</div>
-          <div class="p-size">1080×1080</div>
-          <div class="p-ratio">1:1</div>
-        </button>
-        <button class="preset-btn" id="preset-portrait" onclick="applyPreset('portrait')">
-          <div class="p-thumb" style="width:16px;height:20px"></div>
-          <div class="p-name">পোর্ট্রেট</div>
-          <div class="p-size">1080×1350</div>
-          <div class="p-ratio">4:5</div>
-        </button>
-        <button class="preset-btn" id="preset-story" onclick="applyPreset('story')">
-          <div class="p-thumb" style="width:12px;height:20px"></div>
-          <div class="p-name">স্টোরি</div>
-          <div class="p-size">1080×1920</div>
-          <div class="p-ratio">9:16</div>
-        </button>
-        <button class="preset-btn" id="preset-cover" onclick="applyPreset('cover')">
-          <div class="p-thumb" style="width:28px;height:11px"></div>
-          <div class="p-name">কভার</div>
-          <div class="p-size">820×312</div>
-          <div class="p-ratio">—</div>
-        </button>
-        <button class="preset-btn active" id="preset-custom" onclick="applyPreset('custom')">
-          <div class="p-thumb" style="width:22px;height:18px"></div>
-          <div class="p-name">কাস্টম</div>
-          <div class="p-size">800px</div>
-          <div class="p-ratio">স্বাধীন</div>
-        </button>
-      </div>
-
-      <div class="row2">
+      <!-- TAB: CONTENT -->
+      <div id="tab-content" class="tab-content active">
+        <div class="sec-label">মূল কন্টেন্ট</div>
         <div class="field">
-          <label>ছবির উচ্চতা <span id="imgh-val" style="color:var(--gold)">430</span>px</label>
-          <input type="range" id="f-imgh" min="80" max="1600" value="430" step="10">
+          <label>নিউজ শিরোনাম</label>
+          <textarea id="f-title" placeholder="এখানে শিরোনাম লিখুন...">আজকের প্রধান খবর: বাংলাদেশের উন্নয়ন অগ্রযাত্রা অব্যাহত রয়েছে।</textarea>
         </div>
         <div class="field">
-          <label>শিরোনাম ফন্ট <span id="tfs-val" style="color:var(--gold)">36</span>px</label>
-          <input type="range" id="f-tfs" min="22" max="72" value="36" step="1">
+          <label>নিউজ সোর্স / নাম</label>
+          <input type="text" id="f-source" value="নিউজ ডেস্ক">
+        </div>
+        <div class="field">
+          <label>ফেসবুক পেজ / ইউজারনেম</label>
+          <input type="text" id="f-fb" value="https://www.facebook.com/parves5242">
+        </div>
+
+        <div class="divider"></div>
+        <div class="sec-label">ছবি আপলোড</div>
+        <div class="upload-box">
+          <input type="file" id="img-file" accept="image/*">
+          <div class="icon">🖼️</div>
+          <div class="txt">ক্লিক করে ছবি সিলেক্ট করুন</div>
+          <div id="fname" class="fname">কোনো ছবি নেই</div>
+        </div>
+        <div id="thumb-wrap">
+          <img id="thumb" src="">
+          <button id="thumb-clear" onclick="clearImage()">✕</button>
         </div>
       </div>
 
-      <div class="divider"></div>
-      <span class="sec-label">🎨 রঙ কাস্টমাইজ</span>
+      <!-- TAB: DESIGN -->
+      <div id="tab-design" class="tab-content">
+        <div class="sec-label">কার্ড সাইজ ও প্রিসেট</div>
+        <div class="preset-grid">
+          <button class="preset-btn active" id="preset-fb" onclick="setPreset('fb')">
+            <span class="p-icon">📱</span>
+            <span class="p-name">Facebook</span>
+            <span class="p-size">1080×1080</span>
+            <span class="p-ratio">1:1</span>
+          </button>
+          <button class="preset-btn" id="preset-story" onclick="setPreset('story')">
+            <span class="p-icon">📸</span>
+            <span class="p-name">Story</span>
+            <span class="p-size">1080×1920</span>
+            <span class="p-ratio">9:16</span>
+          </button>
+          <button class="preset-btn" id="preset-hd" onclick="setPreset('hd')">
+            <span class="p-icon">📺</span>
+            <span class="p-name">HD Card</span>
+            <span class="p-size">1280×720</span>
+            <span class="p-ratio">16:9</span>
+          </button>
+        </div>
 
-      <div class="color-grid">
-        <div class="color-item">
-          <label>ব্যানার রঙ</label>
-          <div class="color-swatch">
-            <input type="color" id="c-banner" value="#8B0000">
-            <span id="c-banner-lbl">#8B0000</span>
+        <div class="divider"></div>
+        <div class="sec-label">লেআউট কন্ট্রোল</div>
+        <div class="field">
+          <label>ছবির উচ্চতা: <span id="imgh-val">600</span>px</label>
+          <input type="range" id="f-imgh" min="200" max="1200" value="600" oninput="document.getElementById('imgh-val').textContent=this.value; scheduleRender();">
+        </div>
+        <div class="field">
+          <label>শিরোনাম ফন্ট সাইজ: <span id="tfs-val">42</span>px</label>
+          <input type="range" id="f-tfs" min="20" max="80" value="42" oninput="document.getElementById('tfs-val').textContent=this.value; scheduleRender();">
+        </div>
+        <div class="field">
+          <label>ছবির ওপর কালো আস্তরণ (Overlay): <span id="ov-val">0</span>%</label>
+          <input type="range" id="f-overlay" min="0" max="90" value="0" oninput="document.getElementById('ov-val').textContent=this.value; scheduleRender();">
+        </div>
+
+        <div class="divider"></div>
+        <div class="sec-label">লোগো সেটিংস</div>
+        <div class="row2">
+          <div class="field">
+            <label>লোগো অক্ষর</label>
+            <input type="text" id="f-logo-bn" value="প" maxlength="1">
+          </div>
+          <div class="field">
+            <label>লোগো সাইজ</label>
+            <input type="range" id="f-logo-size" min="30" max="120" value="60" oninput="scheduleRender()">
           </div>
         </div>
-        <div class="color-item">
-          <label>তারিখ ব্যাজ</label>
-          <div class="color-swatch">
-            <input type="color" id="c-accent" value="#d4a017">
-            <span id="c-accent-lbl">#d4a017</span>
-          </div>
+        <div class="field">
+          <label>লোগো পজিশন</label>
+          <select id="f-logo-pos" onchange="scheduleRender()">
+            <option value="bottomright">নিচে ডানে</option>
+            <option value="bottomleft">নিচে বামে</option>
+            <option value="topright">উপরে ডানে</option>
+            <option value="topleft">উপরে বামে</option>
+            <option value="center">মাঝখানে</option>
+            <option value="bottomcenter">নিচে মাঝখানে</option>
+          </select>
         </div>
-        <div class="color-item">
-          <label>বডি ব্যাকগ্রাউন্ড</label>
-          <div class="color-swatch">
-            <input type="color" id="c-body" value="#1a472a">
-            <span id="c-body-lbl">#1a472a</span>
+
+        <div class="divider"></div>
+        <div class="sec-label">রঙ পরিবর্তন</div>
+        <div class="color-grid">
+          <div class="color-item">
+            <label>বডি ব্যাকগ্রাউন্ড</label>
+            <div class="color-swatch"><input type="color" id="c-body" value="#121212"><span id="c-body-lbl">#121212</span></div>
           </div>
-        </div>
-        <div class="color-item">
-          <label>ফুটার রঙ</label>
-          <div class="color-swatch">
-            <input type="color" id="c-footer" value="#8B0000">
-            <span id="c-footer-lbl">#8B0000</span>
+          <div class="color-item">
+            <label>শিরোনামের রঙ</label>
+            <div class="color-swatch"><input type="color" id="c-title" value="#ffffff"><span id="c-title-lbl">#FFFFFF</span></div>
           </div>
-        </div>
-        <div class="color-item">
-          <label>শিরোনামের রঙ</label>
-          <div class="color-swatch">
-            <input type="color" id="c-title" value="#ffffff">
-            <span id="c-title-lbl">#ffffff</span>
+          <div class="color-item">
+            <label>অ্যাকসেন্ট রঙ</label>
+            <div class="color-swatch"><input type="color" id="c-accent" value="#e53935"><span id="c-accent-lbl">#E53935</span></div>
           </div>
-        </div>
-        <div class="color-item">
-          <label>তারিখ টেক্সট</label>
-          <div class="color-swatch">
-            <input type="color" id="c-datetxt" value="#111111">
-            <span id="c-datetxt-lbl">#111111</span>
+          <div class="color-item">
+            <label>ফুটার ব্যাকগ্রাউন্ড</label>
+            <div class="color-swatch"><input type="color" id="c-footer" value="#000000"><span id="c-footer-lbl">#000000</span></div>
           </div>
-        </div>
-        <div class="color-item">
-          <label>অ্যাকসেন্ট স্ট্রাইপ</label>
-          <div class="color-swatch">
-            <input type="color" id="c-stripe" value="#d4a017">
-            <span id="c-stripe-lbl">#d4a017</span>
+          <div class="color-item">
+            <label>স্ট্রাইপ/বর্ডার</label>
+            <div class="color-swatch"><input type="color" id="c-stripe" value="#f0c040"><span id="c-stripe-lbl">#F0C040</span></div>
           </div>
-        </div>
-        <div class="color-item">
-          <label>ফুটার টেক্সট</label>
-          <div class="color-swatch">
-            <input type="color" id="c-ftext" value="#ffffff">
-            <span id="c-ftext-lbl">#ffffff</span>
+          <div class="color-item">
+            <label>ফুটার টেক্সট</label>
+            <div class="color-swatch"><input type="color" id="c-ftext" value="#ffffff"><span id="c-ftext-lbl">#FFFFFF</span></div>
+          </div>
+          <div class="color-item">
+            <label>লোগো রঙ</label>
+            <div class="color-swatch"><input type="color" id="c-logo" value="#e53935"><span id="c-logo-lbl">#E53935</span></div>
+          </div>
+          <div class="color-item">
+            <label>লোগো টেক্সট</label>
+            <div class="color-swatch"><input type="color" id="c-logo-text" value="#ffffff"><span id="c-logo-text-lbl">#FFFFFF</span></div>
+          </div>
+          <div class="color-item">
+            <label>লোগো স্ট্রোক</label>
+            <div class="color-swatch"><input type="color" id="c-logo-stroke" value="#ffffff"><span id="c-logo-stroke-lbl">#FFFFFF</span></div>
           </div>
         </div>
       </div>
 
-      <div class="divider"></div>
-      <span class="sec-label">🔧 অতিরিক্ত অপশন</span>
+      <!-- TAB: AD -->
+      <div id="tab-ad" class="tab-content">
+        <div class="sec-label">বিজ্ঞাপন সেটিংস</div>
+        <div class="field" style="flex-direction:row; align-items:center; gap:10px; cursor:pointer;">
+          <input type="checkbox" id="f-ad-enable" onchange="scheduleRender()" style="width:18px; height:18px;">
+          <label for="f-ad-enable" style="font-size:13px; color:var(--gold); cursor:pointer;">বিজ্ঞাপন ব্যানার চালু করুন</label>
+        </div>
 
-      <div class="field">
-        <label>ইমেজ ওভারলে অপাসিটি <span id="ov-val" style="color:var(--gold)">0%</span></label>
-        <input type="range" id="f-overlay" min="0" max="70" value="0" step="5">
-      </div>
-      <div class="field">
-        <label>ব্যানার অপাসিটি <span id="ba-val" style="color:var(--gold)">91%</span></label>
-        <input type="range" id="f-balpha" min="50" max="100" value="91" step="1">
-      </div>
+        <div class="divider"></div>
+        <div class="sec-label">ব্যানার ডিজাইন</div>
+        <div class="field">
+          <label>ব্যানার উচ্চতা: <span id="adh-val">180</span>px</label>
+          <input type="range" id="f-adh" min="100" max="400" value="180" oninput="document.getElementById('adh-val').textContent=this.value; scheduleRender();">
+        </div>
+        <div class="field">
+          <label>বিজ্ঞাপন টেক্সট সাইজ: <span id="adfs-val">32</span>px</label>
+          <input type="range" id="f-adfs" min="15" max="60" value="32" oninput="document.getElementById('adfs-val').textContent=this.value; scheduleRender();">
+        </div>
 
+        <div class="divider"></div>
+        <div class="sec-label">বিজ্ঞাপন কন্টেন্ট</div>
+        <div class="field">
+          <label>বিজ্ঞাপন মেসেজ</label>
+          <textarea id="f-ad-name" placeholder="বিজ্ঞাপনের কথা এখানে লিখুন...">আপনার ব্যবসার প্রচারের জন্য আজই যোগাযোগ করুন।</textarea>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>ওয়েবসাইট</label>
+            <input type="text" id="f-ad-web" value="www.example.com">
+          </div>
+          <div class="field">
+            <label>ফোন</label>
+            <input type="text" id="f-ad-phone" value="01700-000000">
+          </div>
+        </div>
+        <div class="field">
+          <label>ঠিকানা</label>
+          <input type="text" id="f-ad-addr" value="ঢাকা, বাংলাদেশ">
+        </div>
+
+        <div class="divider"></div>
+        <div class="sec-label">ব্যানার রঙ</div>
+        <div class="color-grid">
+          <div class="color-item">
+            <label>ব্যানার ব্যাকগ্রাউন্ড</label>
+            <div class="color-swatch"><input type="color" id="c-adbg" value="#0a0a0a"><span id="c-adbg-lbl">#0A0A0A</span></div>
+          </div>
+          <div class="color-item">
+            <label>ব্যানার টেক্সট</label>
+            <div class="color-swatch"><input type="color" id="c-adtext" value="#ffffff"><span id="c-adtext-lbl">#FFFFFF</span></div>
+          </div>
+          <div class="color-item">
+            <label>ব্যানার অ্যাকসেন্ট</label>
+            <div class="color-swatch"><input type="color" id="c-adaccent" value="#f0c040"><span id="c-adaccent-lbl">#F0C040</span></div>
+          </div>
+          <div class="color-item">
+            <label>সাব-টেক্সট রঙ</label>
+            <div class="color-swatch"><input type="color" id="c-adsub" value="#aaaaaa"><span id="c-adsub-lbl">#AAAAAA</span></div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="sec-label">বিজ্ঞাপন ছবি (ঐচ্ছিক)</div>
+        <div class="ad-box">
+          <input type="file" id="ad-file" accept="image/*">
+          <div class="icon">🖼️</div>
+          <div class="txt">ব্যানার হিসেবে ছবি ব্যবহার করুন</div>
+          <div id="ad-fname" class="fname">কোনো ছবি নেই</div>
+        </div>
+        <div id="ad-thumb-wrap">
+          <img id="ad-thumb" src="">
+          <button id="ad-thumb-clear" onclick="clearAdImage()">✕</button>
+        </div>
+      </div>
     </div>
   </div>
 
   <div id="canvas-area">
-    <div class="canvas-label">
-      <div class="live-dot"></div>
-      লাইভ প্রিভিউ — ডাউনলোড এভাবেই হবে
-    </div>
-
+    <div class="canvas-label"><div class="live-dot"></div> লাইভ প্রিভিউ</div>
     <div id="canvas-wrapper">
       <canvas id="main-canvas"></canvas>
       <div class="canvas-info">
-        <span>📐 <b id="info-size">800 × …</b></span>
-        <span>🖼️ PNG / JPG</span>
-        <span>🎯 প্রিন্ট রেডি</span>
+        <span id="info-size">1080 × 1080 px</span>
+        <span>•</span>
+        <span>High Quality Render</span>
       </div>
     </div>
-
     <div class="dl-row">
-      <button class="dl-btn dl-png" onclick="doDownload('png')">⬇️ PNG ডাউনলোড</button>
-      <button class="dl-btn dl-jpg" onclick="doDownload('jpg')">⬇️ JPG ডাউনলোড</button>
+      <button class="dl-btn dl-png" onclick="doDownload('png')">PNG ডাউনলোড</button>
+      <button class="dl-btn dl-jpg" onclick="doDownload('jpg')">JPG ডাউনলোড</button>
     </div>
   </div>
-
 </div>
 
-<script>
-let LOADED_IMG = null;
-let renderTimer = null;
-let CW_VAL = 800;
+<div id="overlay" onclick="closePanel()"></div>
+<div id="toast">✅ ডাউনলোড হচ্ছে...</div>
 
-const PRESETS = {
-  standard: { cw: 1200, imgh: 330, tfs: 28 },
-  square:   { cw: 1080, imgh: 680, tfs: 36 },
-  portrait: { cw: 1080, imgh: 950, tfs: 36 },
-  story:    { cw: 1080, imgh: 1520, tfs: 40 },
-  cover:    { cw: 820,  imgh: 90,  tfs: 20 },
-  custom:   { cw: 800,  imgh: 430, tfs: 36 },
+<script>
+let CW_VAL=1080;
+let LOADED_IMG=null;
+let LOADED_AD_IMG=null;
+let renderTimer=null;
+const DEFAULT_AD_URL = "https://iili.io/BLNYsG2.png";
+
+const PRESETS={
+  fb: { w:1080, h:1080, imgh:600, tfs:42 },
+  story: { w:1080, h:1920, imgh:1100, tfs:48 },
+  hd: { w:1280, h:720, imgh:400, tfs:36 }
 };
 
-function applyPreset(key) {
-  const p = PRESETS[key];
-  CW_VAL = p.cw;
-  document.getElementById('f-imgh').value = p.imgh;
-  document.getElementById('imgh-val').textContent = p.imgh;
-  document.getElementById('f-tfs').value = p.tfs;
-  document.getElementById('tfs-val').textContent = p.tfs;
-  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('preset-' + key).classList.add('active');
+function setPreset(key){
+  const p=PRESETS[key];
+  CW_VAL=p.w;
+  document.getElementById('f-imgh').value=p.imgh;
+  document.getElementById('imgh-val').textContent=p.imgh;
+  document.getElementById('f-tfs').value=p.tfs;
+  document.getElementById('tfs-val').textContent=p.tfs;
+  document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('preset-'+key).classList.add('active');
   scheduleRender();
 }
 
-function togglePanel() {
-  const p = document.getElementById('panel');
-  const o = document.getElementById('overlay');
-  const open = p.classList.toggle('open');
-  o.classList.toggle('show', open);
-  document.getElementById('toggle-panel').textContent = open ? '✕' : '☰';
-}
-function closePanel() {
-  document.getElementById('panel').classList.remove('open');
-  document.getElementById('overlay').classList.remove('show');
-  document.getElementById('toggle-panel').textContent = '☰';
+function switchTab(name){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>{
+    const tabs=['content','design','ad'];
+    b.classList.toggle('active',tabs[i]===name);
+  });
+  document.querySelectorAll('.tab-content').forEach(c=>{
+    c.classList.toggle('active',c.id==='tab-'+name);
+  });
 }
 
-document.getElementById('img-file').addEventListener('change', function () {
-  const file = this.files[0];
-  if (!file) return;
-  document.getElementById('fname').textContent = file.name;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const img = new Image();
-    img.onload = () => {
-      LOADED_IMG = img;
-      document.getElementById('thumb').src = e.target.result;
-      document.getElementById('thumb-wrap').style.display = 'block';
-      scheduleRender();
-    };
-    img.src = e.target.result;
+function togglePanel(){
+  const p=document.getElementById('panel'), o=document.getElementById('overlay');
+  const open=p.classList.toggle('open'); o.classList.toggle('show',open);
+  document.getElementById('toggle-panel').textContent=open?'✕':'☰';
+}
+function closePanel(){
+  document.getElementById('panel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+  document.getElementById('toggle-panel').textContent='☰';
+}
+
+// IMAGE UPLOAD
+document.getElementById('img-file').addEventListener('change',function(){
+  const file=this.files[0]; if(!file) return;
+  document.getElementById('fname').textContent=file.name;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{ LOADED_IMG=img; document.getElementById('thumb').src=e.target.result; document.getElementById('thumb-wrap').style.display='block'; scheduleRender(); };
+    img.src=e.target.result;
   };
   reader.readAsDataURL(file);
 });
+function clearImage(){ LOADED_IMG=null; document.getElementById('fname').textContent='কোনো ছবি নেই'; document.getElementById('thumb-wrap').style.display='none'; document.getElementById('img-file').value=''; scheduleRender(); }
 
-function clearImage() {
-  LOADED_IMG = null;
-  document.getElementById('fname').textContent = 'কোনো ছবি নেই';
-  document.getElementById('thumb-wrap').style.display = 'none';
-  document.getElementById('img-file').value = '';
-  scheduleRender();
-}
+// AD IMAGE
+document.getElementById('ad-file').addEventListener('change',function(){
+  const file=this.files[0]; if(!file) return;
+  document.getElementById('ad-fname').textContent=file.name;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{ LOADED_AD_IMG=img; document.getElementById('ad-thumb').src=e.target.result; document.getElementById('ad-thumb-wrap').style.display='block'; scheduleRender(); };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+function clearAdImage(){ LOADED_AD_IMG=null; document.getElementById('ad-fname').textContent='কোনো ছবি নেই'; document.getElementById('ad-thumb-wrap').style.display='none'; document.getElementById('ad-file').value=''; scheduleRender(); }
 
-function scheduleRender() {
-  clearTimeout(renderTimer);
-  renderTimer = setTimeout(render, 60);
-}
-
-const colorIds = ['c-banner','c-accent','c-body','c-footer','c-title','c-datetxt','c-stripe','c-ftext'];
-colorIds.forEach(id => {
-  document.getElementById(id).addEventListener('input', function () {
-    document.getElementById(id + '-lbl').textContent = this.value.toUpperCase();
-    scheduleRender();
-  });
+// COLOR INPUTS
+['c-logo','c-logo-text','c-logo-stroke','c-body','c-accent','c-title','c-footer','c-stripe','c-ftext','c-adbg','c-adtext','c-adaccent','c-adsub'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('input',function(){ const lbl=document.getElementById(id+'-lbl'); if(lbl) lbl.textContent=this.value.toUpperCase(); scheduleRender(); });
+});
+['f-title','f-source','f-fb','f-logo-bn','f-ad-name','f-ad-web','f-ad-phone','f-ad-addr'].forEach(id=>{
+  const el=document.getElementById(id); if(el) el.addEventListener('input',scheduleRender);
 });
 
-['f-banner','f-bsub','f-date','f-title','f-fb'].forEach(id => {
-  document.getElementById(id).addEventListener('input', scheduleRender);
-});
+function scheduleRender(){ clearTimeout(renderTimer); renderTimer=setTimeout(render,60); }
 
-[
-  ['f-imgh', 'imgh-val', v => v + ''],
-  ['f-tfs',  'tfs-val',  v => v + ''],
-  ['f-overlay', 'ov-val', v => v + '%'],
-  ['f-balpha',  'ba-val',  v => v + '%'],
-].forEach(([id, lbl, fmt]) => {
-  document.getElementById(id).addEventListener('input', function () {
-    document.getElementById(lbl).textContent = fmt(this.value);
-    scheduleRender();
-  });
-});
-
-function hex2rgba(hex, a) {
-  const r = parseInt(hex.slice(1,3),16);
-  const g = parseInt(hex.slice(3,5),16);
-  const b = parseInt(hex.slice(5,7),16);
-  return `rgba(${r},${g},${b},${a})`;
+// UTILS
+function fillRoundRect(ctx,x,y,w,h,r){
+  if(w<0||h<0) return;
+  r=Math.min(r,w/2,h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();ctx.fill();
 }
 
-function drawCover(ctx, img, x, y, w, h) {
-  const ir = img.width / img.height;
-  const cr = w / h;
-  let sx, sy, sw, sh;
-  if (ir > cr) { sh = img.height; sw = sh * cr; sx = (img.width - sw)/2; sy = 0; }
-  else          { sw = img.width;  sh = sw / cr; sx = 0; sy = (img.height - sh)/2; }
-  ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+function drawCover(ctx,img,x,y,w,h){
+  const ir=img.width/img.height, cr=w/h; let sx,sy,sw,sh;
+  if(ir>cr){sh=img.height;sw=sh*cr;sx=(img.width-sw)/2;sy=0;}
+  else{sw=img.width;sh=sw/cr;sx=0;sy=(img.height-sh)/2;}
+  ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);
 }
 
-function drawWrapped(ctx, text, x, y, maxW, lineH) {
-  const words = text.split(' ');
-  let line = '', rows = [];
-  for (const w of words) {
-    const test = line ? line + ' ' + w : w;
-    if (ctx.measureText(test).width > maxW && line) { rows.push(line); line = w; }
-    else line = test;
+function drawWrapped(ctx,text,x,y,maxW,lineH){
+  const words=text.split(' '); let line='',rows=[];
+  for(const w of words){
+    const test=line?line+' '+w:w;
+    if(ctx.measureText(test).width>maxW&&line){rows.push(line);line=w;}
+    else line=test;
   }
-  if (line) rows.push(line);
-  rows.forEach((row, i) => ctx.fillText(row, x, y + i * lineH));
+  if(line) rows.push(line);
+  rows.forEach((r,i)=>ctx.fillText(r,x,y+i*lineH));
   return rows.length;
 }
 
-function fillRoundRect(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.arcTo(x+w, y,   x+w, y+h, r);
-  ctx.arcTo(x+w, y+h, x,   y+h, r);
-  ctx.arcTo(x,   y+h, x,   y,   r);
-  ctx.arcTo(x,   y,   x+w, y,   r);
-  ctx.closePath();
-  ctx.fill();
+function drawWrappedLines(ctx,text,x,y,maxW,lineH){
+  const words=text.split(' '); let line='',rows=[];
+  for(const w of words){
+    const test=line?line+' '+w:w;
+    if(ctx.measureText(test).width>maxW&&line){rows.push(line);line=w;}
+    else line=test;
+  }
+  if(line) rows.push(line);
+  return rows;
 }
 
-function render() {
-  const canvas = document.getElementById('main-canvas');
-  const ctx    = canvas.getContext('2d');
+function toBnNum(n){
+  const d=['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+  return String(n).split('').map(c=>d[+c]??c).join('');
+}
 
-  const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
-  const bnMonths = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
-  function toBnNum(n) { return String(n).split('').map(d => bnDigits[+d]).join(''); }
-  const now = new Date();
-  const dateText = `${toBnNum(now.getDate())} ${bnMonths[now.getMonth()]} ${toBnNum(now.getFullYear())}`;
-  const titleText  = document.getElementById('f-title').value  || '';
-  const fbUrl      = document.getElementById('f-fb').value     || '';
+function render(){
+  const canvas=document.getElementById('main-canvas');
+  const ctx=canvas.getContext('2d');
 
-  const cBanner  = document.getElementById('c-banner').value;
-  const cAccent  = document.getElementById('c-accent').value;
-  const cBody    = document.getElementById('c-body').value;
-  const cFooter  = document.getElementById('c-footer').value;
-  const cTitle   = document.getElementById('c-title').value;
-  const cDateTxt = document.getElementById('c-datetxt').value;
-  const cStripe  = document.getElementById('c-stripe').value;
-  const cFtext   = document.getElementById('c-ftext').value;
+  const CW=CW_VAL;
+  const SCALE=CW/800;
+  const PAD=Math.round(CW*0.035);
+  const IMG_H=parseInt(document.getElementById('f-imgh').value);
+  const TITLE_FS=parseInt(document.getElementById('f-tfs').value);
+  const TITLE_LH=Math.round(TITLE_FS*1.58);
+  const overlay=parseInt(document.getElementById('f-overlay').value)/100;
+  const adEnable=document.getElementById('f-ad-enable').checked;
+  const AD_H=adEnable?parseInt(document.getElementById('f-adh').value):0;
+  const adFontSize=parseInt(document.getElementById('f-adfs').value);
 
-  const IMG_H   = parseInt(document.getElementById('f-imgh').value);
-  const TITLE_FS = parseInt(document.getElementById('f-tfs').value);
-  const overlay  = parseInt(document.getElementById('f-overlay').value) / 100;
-  const bannerAlpha = parseInt(document.getElementById('f-balpha').value) / 100;
+  const cBody=document.getElementById('c-body').value;
+  const cAccent=document.getElementById('c-accent').value;
+  const cTitle=document.getElementById('c-title').value;
+  const cFooter=document.getElementById('c-footer').value;
+  const cStripe=document.getElementById('c-stripe').value;
+  const cFtext=document.getElementById('c-ftext').value;
+  const cLogo=document.getElementById('c-logo').value;
+  const cLogoText=document.getElementById('c-logo-text').value;
+  const cLogoStroke=document.getElementById('c-logo-stroke').value;
+  const cAdBg=document.getElementById('c-adbg').value;
+  const cAdText=document.getElementById('c-adtext').value;
+  const cAdAccent=document.getElementById('c-adaccent').value;
+  const cAdSub=document.getElementById('c-adsub').value;
+  const logoChar=document.getElementById('f-logo-bn').value||'ন';
+  const logoSize=parseInt(document.getElementById('f-logo-size').value);
+  const logoPos=document.getElementById('f-logo-pos').value;
+  const titleText=document.getElementById('f-title').value||'';
+  const sourceText=document.getElementById('f-source').value||'';
+  const fbUrl=document.getElementById('f-fb').value||'';
+  const adMsgRaw=document.getElementById('f-ad-name').value||'';
+  const adWeb=document.getElementById('f-ad-web').value||'';
+  const adPhone=document.getElementById('f-ad-phone').value||'';
+  const adAddr=document.getElementById('f-ad-addr').value||'';
 
-  const CW       = CW_VAL;
-  const PAD      = Math.round(CW * 0.032);
-  const SCALE    = CW / 800;
-  const TITLE_LH = Math.round(TITLE_FS * 1.55);
-  const DATE_H   = Math.round(44 * SCALE);
-  const DATE_MB  = Math.round(18 * SCALE);
-  const BODY_PT  = Math.round(24 * SCALE);
-  const BODY_PB  = Math.round(30 * SCALE);
-  const FOOT_H   = Math.round(70 * SCALE);
+  const bnMonths=['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+  const now=new Date();
+  const dateText=`${toBnNum(now.getDate())} ${bnMonths[now.getMonth()]} ${toBnNum(now.getFullYear())}`;
 
-  canvas.width = CW; canvas.height = 10;
-  ctx.font = `700 ${TITLE_FS}px "Noto Serif Bengali", serif`;
-  const titleMaxW = CW - PAD * 2;
-  const tWords = titleText.split(' ');
-  let tl = '', trows = [];
-  for (const w of tWords) {
-    const test = tl ? tl + ' ' + w : w;
-    if (ctx.measureText(test).width > titleMaxW && tl) { trows.push(tl); tl = w; }
-    else tl = test;
+  canvas.width=CW; canvas.height=10;
+  ctx.font=`700 ${TITLE_FS}px "Noto Serif Bengali",serif`;
+  const titleMaxW=CW-PAD*2;
+  const tWords=titleText.split(' '); let tl='',trows=[];
+  for(const w of tWords){
+    const test=tl?tl+' '+w:w;
+    if(ctx.measureText(test).width>titleMaxW&&tl){trows.push(tl);tl=w;}
+    else tl=test;
   }
-  if (tl) trows.push(tl);
-  const titleBlockH = trows.length * TITLE_LH;
+  if(tl) trows.push(tl);
 
-  const BODY_H = BODY_PT + DATE_H + DATE_MB + titleBlockH + BODY_PB;
-  const CH     = IMG_H + BODY_H + FOOT_H;
+  const BODY_PT=Math.round(22*SCALE);
+  const BODY_PB=Math.round(28*SCALE);
+  const DATE_H=Math.round(40*SCALE);
+  const DATE_MB=Math.round(16*SCALE);
+  const BODY_H=BODY_PT+DATE_H+DATE_MB+trows.length*TITLE_LH+BODY_PB;
+  const FOOT_H=Math.round(66*SCALE);
+  const CH=IMG_H+BODY_H+FOOT_H+AD_H;
 
-  canvas.width  = CW;
-  canvas.height = CH;
+  canvas.width=CW; canvas.height=CH;
+  document.getElementById('info-size').textContent=`${CW} × ${CH} px`;
 
-  const activePreset = document.querySelector('.preset-btn.active');
-  const presetLabel = activePreset ? activePreset.querySelector('.p-name').textContent : 'কাস্টম';
-  document.getElementById('info-size').textContent = `${CW} × ${CH} px — ${presetLabel}`;
-
-  ctx.save();
-  ctx.beginPath(); ctx.rect(0, 0, CW, IMG_H); ctx.clip();
-
-  if (LOADED_IMG) {
-    drawCover(ctx, LOADED_IMG, 0, 0, CW, IMG_H);
-    if (overlay > 0) {
-      ctx.fillStyle = `rgba(0,0,0,${overlay})`;
-      ctx.fillRect(0, 0, CW, IMG_H);
-    }
+  // === IMAGE AREA ===
+  ctx.save(); ctx.beginPath(); ctx.rect(0,0,CW,IMG_H); ctx.clip();
+  if(LOADED_IMG){
+    drawCover(ctx,LOADED_IMG,0,0,CW,IMG_H);
+    if(overlay>0){ ctx.fillStyle=`rgba(0,0,0,${overlay})`; ctx.fillRect(0,0,CW,IMG_H); }
   } else {
-    const g = ctx.createLinearGradient(0, 0, CW, IMG_H);
-    g.addColorStop(0, '#8daa8e');
-    g.addColorStop(1, '#5a7a5a');
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, CW, IMG_H);
-    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-    ctx.lineWidth = 1;
-    for (let gx = 0; gx <= CW; gx += 80) { ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,IMG_H); ctx.stroke(); }
-    for (let gy = 0; gy <= IMG_H; gy += 80) { ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(CW,gy); ctx.stroke(); }
-    ctx.font = `${Math.round(56 * SCALE)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillStyle = 'rgba(255,255,255,0.4)';
-    ctx.fillText('📷', CW/2, IMG_H/2 - Math.round(20 * SCALE));
-    ctx.font = `700 ${Math.round(22 * SCALE)}px "Hind Siliguri", sans-serif`;
-    ctx.fillStyle = 'rgba(255,255,255,0.65)';
-    ctx.fillText('বাম প্যানেল থেকে ছবি যোগ করুন', CW/2, IMG_H/2 + Math.round(38 * SCALE));
-    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+    const g=ctx.createLinearGradient(0,0,CW,IMG_H);
+    g.addColorStop(0,'#1a1a2e'); g.addColorStop(0.5,'#16213e'); g.addColorStop(1,'#0f3460');
+    ctx.fillStyle=g; ctx.fillRect(0,0,CW,IMG_H);
+    ctx.strokeStyle='rgba(255,255,255,0.04)'; ctx.lineWidth=1;
+    const gStep=Math.round(60*SCALE);
+    for(let gx=0;gx<CW;gx+=gStep){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,IMG_H);ctx.stroke();}
+    for(let gy=0;gy<IMG_H;gy+=gStep){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(CW,gy);ctx.stroke();}
+    const cx2=CW/2, cy2=IMG_H/2;
+    ctx.fillStyle='rgba(255,255,255,0.06)';
+    ctx.beginPath();ctx.arc(cx2,cy2,Math.round(70*SCALE),0,Math.PI*2);ctx.fill();
+    ctx.font=`${Math.round(48*SCALE)}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillStyle='rgba(255,255,255,0.3)';
+    ctx.fillText('📷',cx2,cy2-Math.round(8*SCALE));
+    ctx.font=`600 ${Math.round(18*SCALE)}px "Hind Siliguri",sans-serif`;
+    ctx.fillStyle='rgba(255,255,255,0.4)';
+    ctx.fillText('ছবি যোগ করুন',cx2,cy2+Math.round(52*SCALE));
+    ctx.textAlign='left';ctx.textBaseline='alphabetic';
   }
   ctx.restore();
 
-  ctx.fillStyle = cBody;
-  ctx.fillRect(0, IMG_H, CW, BODY_H);
+  // === LOGO (Professional Design) ===
+  const LR = logoSize / 2;
+  const LPad = Math.round(18 * SCALE);
+  let LX, LY;
+  if(logoPos==='bottomcenter'){ LX=CW/2; LY=IMG_H - LR - Math.round(30*SCALE); }
+  else if(logoPos==='center'){ LX=CW/2; LY=IMG_H/2; }
+  else if(logoPos==='topleft'){ LX=LPad+LR; LY=LPad+LR; }
+  else if(logoPos==='topright'){ LX=CW-LPad-LR; LY=LPad+LR; }
+  else if(logoPos==='bottomleft'){ LX=LPad+LR; LY=IMG_H-LPad-LR; }
+  else { LX=CW-LPad-LR; LY=IMG_H-LPad-LR; }
 
-  ctx.fillStyle = cStripe;
-  ctx.fillRect(0, IMG_H, CW, Math.round(5 * SCALE));
+  ctx.save();
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
 
-  ctx.fillStyle = cStripe;
-  ctx.fillRect(0, IMG_H + Math.round(5 * SCALE), Math.round(4 * SCALE), BODY_H - Math.round(5 * SCALE));
+  // === Swoosh Line 1: Diagonal stroke (top-right to bottom-left) ===
+  const strokeWidth1 = Math.round(7 * SCALE);
+  ctx.strokeStyle = cLogoStroke;
+  ctx.lineWidth = strokeWidth1;
+  ctx.beginPath();
+  ctx.moveTo(LX + LR * 1.35, LY - LR * 1.4);
+  ctx.lineTo(LX - LR * 0.6, LY + LR * 0.8);
+  ctx.stroke();
 
-  const BY       = IMG_H + BODY_PT;
-  const dateFontS = Math.round(17 * SCALE);
-  ctx.font = `700 ${dateFontS}px "Hind Siliguri", sans-serif`;
-  const dW = ctx.measureText(dateText).width + Math.round(34 * SCALE);
-  ctx.fillStyle = cAccent;
-  fillRoundRect(ctx, PAD, BY, dW, DATE_H, Math.round(9 * SCALE));
+  // === Swoosh Line 2: Curved arc (elegant swoosh around circle) ===
+  const arcRadius = LR * 1.8;
+  const arcStrokeWidth = Math.round(7 * SCALE);
+  ctx.strokeStyle = cLogoStroke;
+  ctx.lineWidth = arcStrokeWidth;
+  ctx.beginPath();
+  ctx.arc(LX, LY, arcRadius, 2.8, 5.5);
+  ctx.stroke();
 
-  ctx.fillStyle    = cDateTxt;
+  // === Main Circle Fill (Red/Primary Color) ===
+  ctx.fillStyle = cLogo;
+  ctx.beginPath();
+  ctx.arc(LX, LY, LR, 0, Math.PI * 2);
+  ctx.fill();
+
+  // === Circle Outer Border (White/Stroke Color) ===
+  ctx.strokeStyle = cLogoStroke;
+  ctx.lineWidth = Math.round(5 * SCALE);
+  ctx.beginPath();
+  ctx.arc(LX, LY, LR + Math.round(8 * SCALE), 0, Math.PI * 2);
+  ctx.stroke();
+
+  // === Inner Circle Border (subtle) ===
+  ctx.strokeStyle = cLogoStroke;
+  ctx.lineWidth = Math.round(2 * SCALE);
+  ctx.globalAlpha = 0.5;
+  ctx.beginPath();
+  ctx.arc(LX, LY, LR - Math.round(4 * SCALE), 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+
+  // === Bengali Letter (Center) ===
+  ctx.fillStyle = cLogoText;
+  const logoFontS = Math.round(logoSize * 0.65);
+  ctx.font = `900 ${logoFontS}px "Noto Serif Bengali",serif`;
+  ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText(dateText, PAD + Math.round(17 * SCALE), BY + DATE_H / 2);
+  ctx.fillText(logoChar, LX, LY + Math.round(2 * SCALE));
+  ctx.textAlign = 'left';
   ctx.textBaseline = 'alphabetic';
+  ctx.restore();
 
-  const titleY = BY + DATE_H + DATE_MB + TITLE_FS * 0.82;
-  ctx.fillStyle = cTitle;
-  ctx.font = `700 ${TITLE_FS}px "Noto Serif Bengali", serif`;
-  drawWrapped(ctx, titleText, PAD, titleY, titleMaxW, TITLE_LH);
+  // === BODY ===
+  const BY=IMG_H;
+  ctx.fillStyle=cBody;
+  ctx.fillRect(0,BY,CW,BODY_H);
+  ctx.save();
+  ctx.globalAlpha=0.08;
+  ctx.strokeStyle='#ffffff';
+  ctx.lineWidth=Math.round(2*SCALE);
+  const gwR=Math.round(BODY_H*0.55);
+  const gwX=CW*0.72; const gwY=BY+BODY_H*0.5;
+  ctx.beginPath();ctx.arc(gwX,gwY,gwR,0,Math.PI*2);ctx.stroke();
+  for(let lat=-0.5;lat<=0.5;lat+=0.25){
+    const lY=gwY+lat*gwR*1.8;
+    const lR2=Math.sqrt(Math.max(0,gwR*gwR-(lY-gwY)*(lY-gwY)));
+    if(lR2>0){ctx.beginPath();ctx.ellipse(gwX,lY,lR2,lR2*0.3,0,0,Math.PI*2);ctx.stroke();}
+  }
+  for(let i=0;i<3;i++){
+    ctx.beginPath();ctx.ellipse(gwX,gwY,gwR*0.4*i/2+gwR*0.1,gwR,0,0,Math.PI*2);ctx.stroke();
+  }
+  ctx.globalAlpha=1;
+  ctx.restore();
+  ctx.fillStyle=cStripe;
+  ctx.fillRect(0,BY,CW,Math.round(5*SCALE));
+  ctx.fillRect(0,BY+Math.round(5*SCALE),Math.round(5*SCALE),BODY_H-Math.round(5*SCALE));
+  const dateFontS=Math.round(16*SCALE);
+  ctx.font=`700 ${dateFontS}px "Hind Siliguri",sans-serif`;
+  const dW=ctx.measureText(dateText).width+Math.round(30*SCALE);
+  ctx.fillStyle=cAccent;
+  fillRoundRect(ctx,PAD,BY+BODY_PT,dW,DATE_H,Math.round(8*SCALE));
+  ctx.fillStyle='#c8c8c8';
+  ctx.textBaseline='middle';
+  ctx.fillText(dateText,PAD+Math.round(15*SCALE),BY+BODY_PT+DATE_H/2);
+  ctx.textBaseline='alphabetic';
+  const titleY=BY+BODY_PT+DATE_H+DATE_MB+TITLE_FS*0.82;
+  ctx.fillStyle=cTitle;
+  ctx.font=`700 ${TITLE_FS}px "Noto Serif Bengali",serif`;
+  drawWrapped(ctx,titleText,PAD,titleY,titleMaxW,TITLE_LH);
 
-  const FY = IMG_H + BODY_H;
+  // === FOOTER ===
+  const FY=IMG_H+BODY_H;
+  ctx.fillStyle=cFooter;
+  ctx.fillRect(0,FY,CW,FOOT_H);
+  ctx.fillStyle=cStripe;
+  ctx.fillRect(0,FY,CW,Math.round(3*SCALE));
+  const FR=Math.round(24*SCALE);
+  const FCX=Math.round(46*SCALE);
+  const FCY=FY+FOOT_H/2;
+  ctx.fillStyle='#1877f2';
+  ctx.beginPath(); ctx.arc(FCX,FCY,FR,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,0.3)'; ctx.lineWidth=Math.round(1.5*SCALE);
+  ctx.beginPath(); ctx.arc(FCX,FCY,FR+Math.round(3*SCALE),0,Math.PI*2); ctx.stroke();
+  ctx.fillStyle='#fff';
+  ctx.font=`900 ${Math.round(28*SCALE)}px "Times New Roman",serif`;
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('f',FCX+Math.round(1*SCALE),FCY+Math.round(2*SCALE));
+  ctx.textAlign='left'; ctx.textBaseline='middle';
+  ctx.fillStyle=cFtext;
+  ctx.font=`600 ${Math.round(17*SCALE)}px "Hind Siliguri",sans-serif`;
+  ctx.fillText(fbUrl,FCX+FR+Math.round(14*SCALE),FCY-Math.round(10*SCALE));
+  ctx.font=`700 ${Math.round(19*SCALE)}px "Hind Siliguri",sans-serif`;
+  ctx.fillStyle=cStripe;
+  const srcW=ctx.measureText(sourceText).width;
+  ctx.fillText(sourceText,CW-srcW-Math.round(14*SCALE),FCY);
+  ctx.textBaseline='alphabetic';
 
-  const fg = ctx.createLinearGradient(0, FY, CW, FY + FOOT_H);
-  fg.addColorStop(0, cFooter);
-  fg.addColorStop(1, hex2rgba(cFooter, 0.82));
-  ctx.fillStyle = fg;
-  ctx.fillRect(0, FY, CW, FOOT_H);
-
-  ctx.fillStyle = cStripe;
-  ctx.fillRect(0, FY, CW, Math.round(3 * SCALE));
-
-  const FR  = Math.round(26 * SCALE);
-  const FCX = Math.round(50 * SCALE);
-  const FCY = FY + FOOT_H / 2;
-  ctx.fillStyle = '#1877f2';
-  ctx.beginPath(); ctx.arc(FCX, FCY, FR, 0, Math.PI*2); ctx.fill();
-
-  ctx.strokeStyle = 'rgba(255,255,255,0.3)';
-  ctx.lineWidth = Math.round(1.5 * SCALE);
-  ctx.beginPath(); ctx.arc(FCX, FCY, FR + Math.round(3 * SCALE), 0, Math.PI*2); ctx.stroke();
-
-  ctx.fillStyle    = '#ffffff';
-  ctx.font         = `900 ${Math.round(30 * SCALE)}px "Times New Roman", serif`;
-  ctx.textAlign    = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('f', FCX + Math.round(1 * SCALE), FCY + Math.round(2 * SCALE));
-
-  ctx.textAlign    = 'left';
-  ctx.textBaseline = 'middle';
-  ctx.fillStyle    = cFtext;
-  ctx.font         = `600 ${Math.round(18 * SCALE)}px "Hind Siliguri", sans-serif`;
-  ctx.fillText(fbUrl, FCX + FR + Math.round(16 * SCALE), FCY);
-  ctx.textBaseline = 'alphabetic';
+  // === AD BANNER ===
+  if(adEnable && AD_H>0){
+    const AY=FY+FOOT_H;
+    if(LOADED_AD_IMG){
+      drawCover(ctx,LOADED_AD_IMG,0,AY,CW,AD_H);
+    } else {
+      ctx.fillStyle=cAdBg;
+      ctx.fillRect(0,AY,CW,AD_H);
+      const adGrad=ctx.createLinearGradient(0,AY,CW,AY);
+      adGrad.addColorStop(0,cAdAccent);
+      adGrad.addColorStop(0.5,cAdText);
+      adGrad.addColorStop(1,cAdAccent);
+      ctx.fillStyle=adGrad;
+      ctx.fillRect(0,AY,CW,Math.round(5*SCALE));
+      const adScale=CW/1080;
+      const aPad=Math.round(28*adScale);
+      const aMid=AY+AD_H/2;
+      const bookSize=Math.round(AD_H*0.52);
+      const bookX=aPad;
+      const bookY=aMid-bookSize/2;
+      ctx.fillStyle=cAdAccent;
+      fillRoundRect(ctx,bookX,bookY,bookSize*0.18,bookSize,Math.round(4*adScale));
+      ctx.fillStyle=cAdText;
+      fillRoundRect(ctx,bookX+bookSize*0.18,bookY,bookSize*0.72,bookSize,Math.round(4*adScale));
+      ctx.fillStyle=cAdBg;
+      const lineW=bookSize*0.45;
+      const lineStartX=bookX+bookSize*0.28;
+      for(let i=0;i<4;i++){
+        const ly=bookY+bookSize*0.2+i*bookSize*0.16;
+        fillRoundRect(ctx,lineStartX,ly,lineW*(i===0?1:0.7),Math.round(3*adScale),Math.round(2*adScale));
+      }
+      const contentX=bookX+bookSize+Math.round(24*adScale);
+      const contentMaxW=CW-contentX-aPad;
+      ctx.fillStyle=cAdText;
+      ctx.font=`700 ${Math.round(adFontSize*adScale)}px "Noto Serif Bengali",serif`;
+      ctx.textAlign='left'; ctx.textBaseline='top';
+      const adLines=drawWrappedLines(ctx,adMsgRaw,contentX,0,contentMaxW,Math.round(adFontSize*adScale*1.45));
+      const totalTextH=adLines.length*Math.round(adFontSize*adScale*1.45);
+      const infoLineH=Math.round(20*adScale);
+      const infoLines=[];
+      if(adWeb) infoLines.push({icon:'🌐',text:adWeb});
+      if(adPhone) infoLines.push({icon:'📞',text:adPhone});
+      if(adAddr) infoLines.push({icon:'📍',text:adAddr});
+      const totalInfoH=infoLines.length*infoLineH;
+      const blockH=totalTextH+(infoLines.length>0?Math.round(10*adScale):0)+totalInfoH;
+      const blockTop=aMid-blockH/2;
+      adLines.forEach((line,i)=>{
+        ctx.fillStyle=cAdText;
+        ctx.font=`700 ${Math.round(adFontSize*adScale)}px "Noto Serif Bengali",serif`;
+        ctx.fillText(line,contentX,blockTop+i*Math.round(adFontSize*adScale*1.45));
+      });
+      if(infoLines.length>0){
+        const infoStartY=blockTop+totalTextH+Math.round(10*adScale);
+        infoLines.forEach((info,i)=>{
+          ctx.fillStyle=cAdSub;
+          ctx.font=`400 ${Math.round(16*adScale)}px "Hind Siliguri",sans-serif`;
+          ctx.fillText(info.icon+' '+info.text,contentX,infoStartY+i*infoLineH);
+        });
+      }
+      if(adWeb){
+        ctx.font=`600 ${Math.round(14*adScale)}px "Hind Siliguri",sans-serif`;
+        const pillW=ctx.measureText(adWeb).width+Math.round(22*adScale);
+        const pillH=Math.round(26*adScale);
+        const pillX=CW-aPad-pillW;
+        const pillY=AY+AD_H-aPad/2-pillH;
+        ctx.fillStyle=cAdAccent;
+        fillRoundRect(ctx,pillX,pillY,pillW,pillH,Math.round(13*adScale));
+        ctx.fillStyle='#fff';
+        ctx.textBaseline='middle';
+        ctx.textAlign='center';
+        ctx.fillText(adWeb,pillX+pillW/2,pillY+pillH/2);
+        ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+      }
+    }
+  }
 }
 
-function doDownload(fmt) {
+function doDownload(fmt){
   render();
-  requestAnimationFrame(() => {
-    const canvas = document.getElementById('main-canvas');
-    const a = document.createElement('a');
-    const active = document.querySelector('.preset-btn.active');
-    const pname = active ? active.querySelector('.p-size').textContent.replace('×','x') : 'custom';
-    if (fmt === 'jpg') {
-      a.download = `photocard-${pname}.jpg`;
-      a.href = canvas.toDataURL('image/jpeg', 0.93);
-    } else {
-      a.download = `photocard-${pname}.png`;
-      a.href = canvas.toDataURL('image/png');
-    }
+  requestAnimationFrame(()=>{
+    const canvas=document.getElementById('main-canvas');
+    const a=document.createElement('a');
+    const active=document.querySelector('.preset-btn.active');
+    const pname=active?active.querySelector('.p-size').textContent.replace('×','x'):'custom';
+    if(fmt==='jpg'){a.download=`newscard-${pname}.jpg`;a.href=canvas.toDataURL('image/jpeg',.93);}
+    else{a.download=`newscard-${pname}.png`;a.href=canvas.toDataURL('image/png');}
     a.click();
-    showToast(`✅ ${fmt.toUpperCase()} (${pname}) ডাউনলোড হচ্ছে...`);
+    showToast(`✅ ${fmt.toUpperCase()} ডাউনলোড হচ্ছে...`);
   });
 }
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2600);
+function showToast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2600);
 }
 
 window.addEventListener('load', () => {
+  // Load default ad image
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.onload = () => {
+    LOADED_AD_IMG = img;
+    document.getElementById('ad-thumb').src = DEFAULT_AD_URL;
+    document.getElementById('ad-thumb-wrap').style.display = 'block';
+    document.getElementById('ad-fname').textContent = 'Default Ad Image';
+    render();
+  };
+  img.src = DEFAULT_AD_URL;
+  
   setTimeout(render, 300);
 });
+window.addEventListener('resize',()=>scheduleRender());
 </script>
 </body>
 </html>
